@@ -1,0 +1,117 @@
+:root {
+    --auth-navy: #0f172a;
+    --auth-blue: #2563eb;
+    --auth-indigo: #4f46e5;
+    --auth-muted: #64748b;
+}
+
+body.auth-page {
+    min-height: 100vh;
+    color: #172033;
+    background:
+        radial-gradient(circle at 10% 15%, rgba(96, 165, 250, .34), transparent 29rem),
+        radial-gradient(circle at 90% 86%, rgba(129, 140, 248, .26), transparent 27rem),
+        linear-gradient(135deg, var(--auth-navy), #1e3a8a 52%, var(--auth-indigo));
+}
+
+.auth-shell {
+    width: min(100%, 29rem);
+}
+
+.auth-card {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .72);
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, .97);
+    box-shadow: 0 1.5rem 4rem rgba(2, 6, 23, .3);
+}
+
+.auth-card__body {
+    padding: 2.5rem;
+}
+
+.auth-mark {
+    width: 4rem;
+    height: 4rem;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 1.25rem;
+    border-radius: 1.125rem;
+    color: #fff;
+    font-size: 1.45rem;
+    background: linear-gradient(135deg, var(--auth-blue), var(--auth-indigo));
+    box-shadow: 0 .75rem 1.5rem rgba(37, 99, 235, .28);
+}
+
+.auth-card .form-label {
+    color: #334155;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.auth-card .input-group-text {
+    width: 2.8rem;
+    justify-content: center;
+    border-color: #cbd5e1;
+    color: var(--auth-muted);
+    background: #f8fafc;
+}
+
+.auth-card .form-control {
+    min-height: 3rem;
+    border-color: #cbd5e1;
+}
+
+.auth-card .form-control:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 .25rem rgba(37, 99, 235, .15);
+}
+
+.auth-card .btn-primary {
+    min-height: 3rem;
+    border: 0;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--auth-blue), var(--auth-indigo));
+    box-shadow: 0 .5rem 1rem rgba(37, 99, 235, .22);
+}
+
+.auth-footer {
+    color: rgba(255, 255, 255, .76);
+    font-size: .8125rem;
+}
+
+.password-page {
+    min-height: 100vh;
+    background: #f1f5f9;
+}
+
+.password-card {
+    width: min(100%, 40rem);
+    border: 0;
+    border-radius: 1.25rem;
+    box-shadow: 0 1rem 2.5rem rgba(15, 23, 42, .1);
+}
+
+.password-card__body {
+    padding: 2.25rem;
+}
+
+.password-title-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: .875rem;
+    color: var(--auth-blue);
+    background: #dbeafe;
+}
+
+.password-card .form-control {
+    min-height: 3rem;
+}
+
+@media (max-width: 575.98px) {
+    .auth-card__body, .password-card__body { padding: 1.5rem; }
+    .auth-shell { width: 100%; }
+}
