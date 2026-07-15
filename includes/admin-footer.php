@@ -9,5 +9,6 @@ declare(strict_types=1);
 <script src="<?= escape(asset('lib/bootstrap/dist/js/bootstrap.bundle.min.js')) ?>"></script>
 <script src="<?= escape(asset('js/chart.min.js')) ?>"></script>
 <script src="<?= escape(asset('js/admin.js')) ?>"></script>
+<?php if (isset($pageScripts) && is_string($pageScripts)): ?><?= $pageScripts ?><?php endif; ?>
 </body>
 </html>
