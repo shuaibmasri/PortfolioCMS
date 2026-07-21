@@ -23,13 +23,22 @@
 
     var chartCanvas = document.getElementById('visitorChart');
     if (chartCanvas && window.Chart) {
+        var labels = [];
+        var values = [];
+        try {
+            labels = JSON.parse(chartCanvas.getAttribute('data-labels') || '[]');
+            values = JSON.parse(chartCanvas.getAttribute('data-values') || '[]');
+        } catch (error) {
+            labels = [];
+            values = [];
+        }
         new Chart(chartCanvas, {
             type: 'line',
             data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [{ label: 'Visitors', data: [42, 58, 47, 74, 62, 89, 96], borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, .12)', fill: true, tension: .4, borderWidth: 3, pointRadius: 0, pointHoverRadius: 4 }]
+                labels: labels,
+                datasets: [{ label: 'Visitors', data: values, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, .12)', fill: true, lineTension: .4, borderWidth: 3, pointRadius: 0, pointHoverRadius: 4 }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(148, 163, 184, .16)' }, ticks: { precision: 0 } }, x: { grid: { display: false } } } }
+            options: { responsive: true, maintainAspectRatio: false, legend: { display: false }, scales: { yAxes: [{ ticks: { beginAtZero: true, precision: 0 }, gridLines: { color: 'rgba(148, 163, 184, .16)' } }], xAxes: [{ gridLines: { display: false } }] } }
         });
     }
 }());

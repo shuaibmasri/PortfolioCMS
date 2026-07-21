@@ -19,7 +19,8 @@ if (!isset($extensions[$mime]) || ($type !== 'favicon' && $extensions[$mime] ===
 $directory = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'profile';
 if (!is_dir($directory) && !mkdir($directory, 0755, true)) uout(['success'=>false, 'message'=>'Storage unavailable.'], 500);
 $path = 'uploads/profile/' . bin2hex(random_bytes(16)) . '.' . $extensions[$mime];
-if (!move_uploaded_file($file['tmp_name'], UPLOAD_PATH . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $path))) uout(['success'=>false, 'message'=>'Unable to store image.'], 500);
+$target = uploadFilePath($path);
+if ($target === null || !move_uploaded_file($file['tmp_name'], $target)) uout(['success'=>false, 'message'=>'Unable to store image.'], 500);
 
 try {
     $profile = $pdo->query('SELECT profile_id FROM profiles ORDER BY profile_id LIMIT 1')->fetch();
@@ -28,7 +29,10 @@ try {
     $pdo->prepare("UPDATE profiles SET `{$field}` = :path WHERE profile_id = :id")->execute(['path'=>$path, 'id'=>$profile['profile_id']]);
     uout(['success'=>true, 'message'=>'Image uploaded.', 'url'=>url($path)]);
 } catch (Throwable $exception) {
-    @unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $path));
+    $storedFile = uploadFilePath($path);
+    if ($storedFile !== null) {
+        @unlink($storedFile);
+    }
     error_log($exception->getMessage());
     uout(['success'=>false, 'message'=>'Save profile details before uploading a photo.'], 422);
 }

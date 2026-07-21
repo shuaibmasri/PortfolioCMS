@@ -6,21 +6,21 @@ $activeMenu = $activeMenu ?? 'dashboard';
 $menuItems = [
     'dashboard' => ['Dashboard', 'fa-dashboard', url('admin/dashboard.php')],
     'profile' => ['Profile', 'fa-user', url('admin/profile/index.php')],
-    'skills' => ['Skills', 'fa-code', '#'],
+    'skills' => ['Skills', 'fa-code', url('admin/skills/index.php')],
     'languages' => ['Languages', 'fa-language', '#'],
-    'experience' => ['Experience', 'fa-briefcase', '#'],
-    'education' => ['Education', 'fa-graduation-cap', '#'],
-    'projects' => ['Projects', 'fa-folder-open', '#'],
-    'certificates' => ['Certificates', 'fa-certificate', '#'],
+    'experience' => ['Experience', 'fa-briefcase', url('admin/experience/index.php')],
+    'education' => ['Education', 'fa-graduation-cap', url('admin/education/index.php')],
+    'projects' => ['Projects', 'fa-folder-open', url('admin/projects/index.php')],
+    'certificates' => ['Certificates', 'fa-certificate', url('admin/certificates/index.php')],
     'achievements' => ['Achievements', 'fa-trophy', '#'],
     'services' => ['Services', 'fa-cubes', '#'],
     'testimonials' => ['Testimonials', 'fa-quote-left', '#'],
     'social-links' => ['Social Links', 'fa-share-alt', '#'],
     'cv-manager' => ['CV Manager', 'fa-file-pdf-o', '#'],
-    'messages' => ['Messages', 'fa-envelope', '#'],
+    'messages' => ['Messages', 'fa-envelope', url('admin/messages/index.php')],
     'visitor-statistics' => ['Visitor Statistics', 'fa-line-chart', '#'],
     'theme-settings' => ['Theme Settings', 'fa-paint-brush', '#'],
-    'website-settings' => ['Website Settings', 'fa-cog', '#'],
+    'website-settings' => ['Website Settings', 'fa-cog', url('admin/settings/index.php')],
 ];
 ?>
 <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">

@@ -39,6 +39,70 @@ function asset(string $path): string
     return url('assets/' . ltrim($path, '/'));
 }
 
+/** Returns consistent, safe attributes for responsive raster images. */
+function responsiveImageAttributes(string $alt, string $loading = 'lazy'): string
+{
+    $loading = $loading === 'eager' ? 'eager' : 'lazy';
+
+    return 'alt="' . escape($alt) . '" loading="' . $loading . '" decoding="async"';
+}
+
+/**
+ * Resolves an application upload URL path to its filesystem location.
+ *
+ * Only files in the managed upload directories are accepted so database values
+ * can never traverse outside the upload root when old files are replaced or deleted.
+ */
+function uploadFilePath(string $path): ?string
+{
+    $path = str_replace('\\', '/', trim($path));
+    if (
+        preg_match('#\Auploads/(profile|projects|certificates)/[a-f0-9]{32}\.(?:jpg|png|webp|ico|pdf)\z#i', $path) !== 1
+    ) {
+        return null;
+    }
+
+    return UPLOAD_PATH . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, substr($path, strlen('uploads/')));
+}
+
+/** Records one privacy-conscious public visitor session and page view. */
+function trackPublicVisit(PDO $pdo, string $path): ?int
+{
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        return null;
+    }
+
+    $token = $_SESSION['_visitor_token'] ?? '';
+    if (!is_string($token) || preg_match('/\A[a-f0-9]{64}\z/', $token) !== 1) {
+        $token = bin2hex(random_bytes(32));
+        $_SESSION['_visitor_token'] = $token;
+    }
+
+    $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+    $ipHash = $ip !== '' ? hash('sha256', $ip) : null;
+    $statement = $pdo->prepare(
+        'INSERT INTO visitor_sessions (session_token, last_activity_at, ip_hash, referrer_url, landing_path)
+         VALUES (:token, NOW(), :ip_hash, :referrer, :path)
+         ON DUPLICATE KEY UPDATE last_activity_at = NOW()'
+    );
+    $statement->execute([
+        ':token' => $token,
+        ':ip_hash' => $ipHash,
+        ':referrer' => substr((string) ($_SERVER['HTTP_REFERER'] ?? ''), 0, 1000) ?: null,
+        ':path' => substr($path, 0, 500),
+    ]);
+
+    $lookup = $pdo->prepare('SELECT visitor_session_id FROM visitor_sessions WHERE session_token = :token LIMIT 1');
+    $lookup->execute([':token' => $token]);
+    $sessionId = (int) $lookup->fetchColumn();
+    if ($sessionId > 0) {
+        $view = $pdo->prepare('INSERT INTO page_views (visitor_session_id, page_path, referrer_url) VALUES (:session_id, :path, :referrer)');
+        $view->execute([':session_id' => $sessionId, ':path' => substr($path, 0, 500), ':referrer' => substr((string) ($_SERVER['HTTP_REFERER'] ?? ''), 0, 1000) ?: null]);
+    }
+
+    return $sessionId > 0 ? $sessionId : null;
+}
+
 /**
  * Builds an application URL from a relative path.
  */

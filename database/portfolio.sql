@@ -183,6 +183,7 @@ CREATE TABLE IF NOT EXISTS `certifications` (
   `issuing_organization` VARCHAR(250) NOT NULL,
   `credential_id` VARCHAR(200) NULL,
   `credential_url` VARCHAR(500) NULL,
+  `certificate_image_path` VARCHAR(500) NULL,
   `issued_date` DATE NULL,
   `expiry_date` DATE NULL,
   `certificate_file_path` VARCHAR(500) NULL,
@@ -248,6 +249,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `completed_date` DATE NULL,
   `is_featured` TINYINT(1) NOT NULL DEFAULT 0,
   `is_public` TINYINT(1) NOT NULL DEFAULT 1,
+  `status` VARCHAR(30) NOT NULL DEFAULT 'planned',
   `display_order` INT UNSIGNED NOT NULL DEFAULT 0,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -255,6 +257,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   UNIQUE KEY `uq_projects_slug` (`slug`),
   KEY `idx_projects_category_visibility` (`project_category_id`, `is_public`, `display_order`),
   KEY `idx_projects_featured_visibility` (`is_featured`, `is_public`),
+  KEY `idx_projects_status_visibility` (`status`, `is_public`, `display_order`),
   CONSTRAINT `fk_projects_category`
     FOREIGN KEY (`project_category_id`) REFERENCES `project_categories` (`project_category_id`)
     ON DELETE SET NULL ON UPDATE CASCADE
@@ -415,6 +418,42 @@ CREATE TABLE IF NOT EXISTS `website_settings` (
   UNIQUE KEY `uq_website_settings_key` (`setting_key`),
   KEY `idx_website_settings_group` (`setting_group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Seeds production-ready defaults for the admin Website Settings module.
+INSERT INTO `website_settings`
+  (`setting_key`, `setting_value`, `value_type`, `setting_group`, `description`, `is_public`)
+VALUES
+  ('website_name', 'Portfolio CMS', 'string', 'general', 'Website Name', 0),
+  ('website_tagline', 'Professional portfolio and project showcase', 'string', 'general', 'Website Tagline', 0),
+  ('website_description', 'A modern portfolio management system for showcasing skills, projects, experience, and contact details.', 'string', 'general', 'Website Description', 0),
+  ('footer_text', 'Built with Portfolio CMS', 'string', 'general', 'Footer Text', 0),
+  ('copyright_text', 'Copyright 2026 Portfolio CMS. All rights reserved.', 'string', 'general', 'Copyright Text', 0),
+  ('contact_email', 'hello@example.com', 'string', 'contact', 'Contact Email', 0),
+  ('contact_phone', '+1 555 010 0000', 'string', 'contact', 'Contact Phone', 0),
+  ('address', 'Your City, Your Country', 'string', 'contact', 'Address', 0),
+  ('google_maps_url', 'https://www.google.com/maps', 'string', 'contact', 'Google Maps URL', 0),
+  ('default_language', 'en', 'string', 'localization', 'Default Language', 0),
+  ('time_zone', 'Asia/Aden', 'string', 'localization', 'Time Zone', 0),
+  ('date_format', 'Y-m-d', 'string', 'localization', 'Date Format', 0),
+  ('time_format', 'H:i', 'string', 'localization', 'Time Format', 0),
+  ('meta_title', 'Portfolio CMS | Professional Portfolio Management', 'string', 'seo', 'Meta Title', 0),
+  ('meta_description', 'Portfolio CMS helps you manage and present your professional profile, projects, and services.', 'string', 'seo', 'Meta Description', 0),
+  ('meta_keywords', 'portfolio, skills, projects, experience, profile, admin', 'string', 'seo', 'Meta Keywords', 0),
+  ('robots', 'index,follow', 'string', 'seo', 'Robots', 0),
+  ('canonical_url', 'http://localhost/PortfolioCMS', 'string', 'seo', 'Canonical URL', 0),
+  ('maintenance_mode', '0', 'boolean', 'system', 'Maintenance Mode', 0),
+  ('maintenance_message', 'We are currently performing scheduled maintenance. Please check back soon.', 'string', 'system', 'Maintenance Message', 0),
+  ('facebook_url', 'https://www.facebook.com/your-page', 'string', 'social', 'Facebook', 0),
+  ('linkedin_url', 'https://www.linkedin.com/in/your-profile', 'string', 'social', 'LinkedIn', 0),
+  ('github_url', 'https://github.com/your-username', 'string', 'social', 'GitHub', 0),
+  ('x_url', 'https://x.com/your-handle', 'string', 'social', 'X', 0),
+  ('youtube_url', 'https://www.youtube.com/@yourchannel', 'string', 'social', 'YouTube', 0)
+ON DUPLICATE KEY UPDATE
+  `setting_value` = VALUES(`setting_value`),
+  `value_type` = VALUES(`value_type`),
+  `setting_group` = VALUES(`setting_group`),
+  `description` = VALUES(`description`),
+  `is_public` = VALUES(`is_public`);
 
 -- Defines selectable website themes.
 CREATE TABLE IF NOT EXISTS `themes` (

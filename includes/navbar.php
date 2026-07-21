@@ -30,7 +30,7 @@ declare(strict_types=1);
                 <li class="nav-item"><a class="nav-link" href="<?= escape(url('#contact')) ?>">Contact</a></li>
             </ul>
 
-            <a class="btn btn-primary px-4" href="<?= escape(url('downloads/cv.pdf')) ?>" download>
+            <a class="btn btn-primary px-4" href="<?= escape(url('resume.php?download=1')) ?>" download>
                 <i class="fa-solid fa-download me-2"></i>Download CV
             </a>
         </div>
