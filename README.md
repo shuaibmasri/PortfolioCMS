@@ -11,7 +11,7 @@
 
 ## 🌐 Live Demo
 
-**Website:** https://portfoliocms.shmasri.org
+**Website:** https://shmasri.com
 
 ---
 
@@ -260,7 +260,7 @@ See the `LICENSE` file for details.
 
 ERP Systems Developer | Development Officer
 
-- 🌐 Website: https://portfoliocms.shmasri.org
+- 🌐 Website: https://shmasri.com
 - 💼 LinkedIn: *(www.linkedin.com/in/shuaib-al-masri-228386172)*
 - 📧 Email: *(sh.almassri2013@gmail.com)*
 - 🐙 GitHub: https://github.com/shuaibmasri
